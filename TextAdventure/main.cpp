@@ -233,7 +233,7 @@ void convertInputToCommand(std::string playerInput)
 			getInputFromPlayerAsString();
 		}
 	}
-	if (playerInput == "goe")
+	else if (playerInput == "goe")
 	{
 		if (checkIfMoveLegal(2))
 		{
@@ -249,7 +249,7 @@ void convertInputToCommand(std::string playerInput)
 			getInputFromPlayerAsString();
 		}
 	}
-	if (playerInput == "gos")
+	else if (playerInput == "gos")
 	{
 		if (checkIfMoveLegal(3))
 		{
@@ -265,7 +265,7 @@ void convertInputToCommand(std::string playerInput)
 			getInputFromPlayerAsString();
 		}
 	}
-	if (playerInput == "gow")
+	else if (playerInput == "gow")
 	{
 		if (checkIfMoveLegal(4))
 		{
@@ -281,7 +281,8 @@ void convertInputToCommand(std::string playerInput)
 			getInputFromPlayerAsString();
 		}
 	}
-	if (playerInput == "attack")
+	
+	else if (playerInput == "attack")
 	{
 		switch (playerLocation)
 		{
@@ -341,7 +342,7 @@ void convertInputToCommand(std::string playerInput)
 		}
 	}
 
-	if (playerInput == "loot")
+	else if (playerInput == "loot")
 	{
 		if (playerLocation == 5 && treasureLooted == false)
 		{
@@ -352,7 +353,7 @@ void convertInputToCommand(std::string playerInput)
 		}
 	}
 
-	if (playerInput == "desc")
+	else if (playerInput == "desc")
 	{
 		descRoom();
 		if (playerLocation == 1 && riddleSolved)
@@ -363,7 +364,7 @@ void convertInputToCommand(std::string playerInput)
 
 	}
 
-	if (playerInput == "silence" && playerLocation == 1)
+	else if (playerInput == "silence" && playerLocation == 1)
 	{
 		riddleSolved = true;
 		std::cout << "That's right! The door to the south opens." << std::endl;
@@ -371,9 +372,15 @@ void convertInputToCommand(std::string playerInput)
 		getInputFromPlayerAsString();
 	}
 
-	if (playerInput == "exit")
+	else if (playerInput == "exit")
 	{
 		exit(0);
+	}
+	else 
+	{
+		std::cout << "Invalid Command" << std::endl;
+		std::cout << "What do you do?" << std::endl;
+		getInputFromPlayerAsString();
 	}
 }
 
