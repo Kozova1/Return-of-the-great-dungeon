@@ -1,0 +1,7 @@
+﻿  stdafx.cpp
+  main.cpp
+  Generating code
+d:\users\mug66\source\repos\textadventure\textadventure\main.cpp(117): warning C4715: 'checkIfMoveLegal': not all control paths return a value
+  All 118 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  TextAdventure.vcxproj -> D:\Users\mug66\source\repos\TextAdventure\Release\TextAdventure.exe

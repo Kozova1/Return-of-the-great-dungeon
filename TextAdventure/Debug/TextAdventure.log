@@ -1,0 +1,3 @@
+﻿  main.cpp
+d:\users\mug66\source\repos\textadventure\textadventure\main.cpp(117): warning C4715: 'checkIfMoveLegal': not all control paths return a value
+  TextAdventure.vcxproj -> D:\Users\mug66\source\repos\TextAdventure\Debug\TextAdventure.exe
