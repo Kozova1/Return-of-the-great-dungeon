@@ -15,7 +15,7 @@ loot
 
 desc = describe current room again
 
-attack
+attack = attack the monster in the same room as you.
 
 exit = close the game
 
