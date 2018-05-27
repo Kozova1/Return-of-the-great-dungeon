@@ -19,4 +19,11 @@ attack
 
 exit = close the game
 
+HP = display current HP
+
+heal = heal for a random amount
+
+guard = block the next hit. pretty much useless since the hit will happen instantly after the guard command has been used.
+
 one other command which is an answer for a riddle.
+

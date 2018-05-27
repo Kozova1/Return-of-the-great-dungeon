@@ -2,12 +2,15 @@
 #include <iostream>
 #include <string>
 #include <random>
+#include <chrono>
+#include <thread>
 
 int playerLocation = 2;
 int score = 0;
 int goblinHP = 10;
 int dragonHP = 15;
 int trollHP = 5;
+int playerHP = 15;
 
 bool riddleSolved = false;
 bool trollKilled = false;
@@ -16,6 +19,7 @@ bool dragonKilled = false;
 bool treasureLooted = false;
 
 void convertInputToCommand(std::string playerInput);
+void gameOver();
 
 bool checkIfMoveLegal(int direction)
 {
@@ -147,7 +151,7 @@ void descRoom()
 		std::cout << "You're in a room with a door to the east and a door to the south" << std::endl;
 		if (!trollKilled)
 		{
-			std::cout << "There's an angry troll attacking you." << std::endl;
+			std::cout << "There's an angry troll about to attack you." << std::endl;
 		}
 		else
 		{
@@ -161,7 +165,7 @@ void descRoom()
 		std::cout << "You're in a room with one door to the west, one to the south and one to the north." << std::endl;
 		if (!goblinKilled)
 		{
-			std::cout << "There's a mad goblin attacking you." << std::endl;
+			std::cout << "There's a mad goblin about to attack you." << std::endl;
 		}
 		else
 		{
@@ -194,8 +198,8 @@ void descRoom()
 		break;
 	case 7:
 		std::cout << "You're in a room with a small sign that says:" << std::endl;
-		std::cout << "West for the dragon, North for a fight." << std::endl;
-		std::cout << "There is a door to the North and a door to the West." << std::endl;
+		std::cout << "East for the dragon, North for a fight." << std::endl;
+		std::cout << "There is a door to the North and a door to the East." << std::endl;
 		std::cout << "What do you do?" << std::endl;
 		getInputFromPlayerAsString();
 		break;
@@ -203,7 +207,7 @@ void descRoom()
 		std::cout << "You're in a room with one door to the East." << std::endl;
 		if (!dragonKilled)
 		{
-			std::cout << "There's a red dragon attacking you." << std::endl;
+			std::cout << "There's a red dragon about to attack you." << std::endl;
 		}
 		else
 		{
@@ -293,10 +297,19 @@ void convertInputToCommand(std::string playerInput)
 				{
 					trollKilled = true;
 					std::cout << "The troll is now dead." << std::endl;
+					if (playerHP <= 0)
+					{
+						gameOver();
+					}
 				}
 				else
 				{
 					std::cout << "It hits you back for 1 point of damage." << std::endl;
+					playerHP -= 1;
+					if (playerHP <= 0)
+					{
+						gameOver();
+					}
 				}
 				std::cout << "What do you do?" << std::endl;
 				getInputFromPlayerAsString();
@@ -309,10 +322,19 @@ void convertInputToCommand(std::string playerInput)
 				{
 					goblinKilled = true;
 					std::cout << "The goblin is now dead." << std::endl;
+					if (playerHP <= 0)
+					{
+						gameOver();
+					}
 				}
 				else
 				{
 					std::cout << "It hits you back for 1 point of damage." << std::endl;
+					playerHP -= 1;
+					if (playerHP <= 0)
+					{
+						gameOver();
+					}
 				}
 				std::cout << "What do you do?" << std::endl;
 				getInputFromPlayerAsString();
@@ -325,10 +347,19 @@ void convertInputToCommand(std::string playerInput)
 				{
 					dragonKilled = true;
 					std::cout << "The dragon is now dead." << std::endl;
+					if (playerHP <= 0)
+					{
+						gameOver();
+					}
 				}
 				else
 				{
-					std::cout << "It hits you back for 1 point of damage." << std::endl;
+					std::cout << "It hits you back for 2 points of damage." << std::endl;
+					playerHP -= 2;
+					if (playerHP <= 0)
+					{
+						gameOver();
+					}
 				}
 				std::cout << "What do you do?" << std::endl;
 				getInputFromPlayerAsString();
@@ -364,6 +395,38 @@ void convertInputToCommand(std::string playerInput)
 
 	}
 
+	else if (playerInput == "guard")
+	{
+		if (playerLocation == 3 || playerLocation == 4 || playerLocation == 8)
+		{
+			std::cout << "You get hit but you manage to block the hit." << std::endl;
+			std::cout << "What do you do?" << std::endl;
+			getInputFromPlayerAsString();
+		}
+		else 
+		{
+			std::cout << "There's nothing to guard from!" << std::endl;
+			std::cout << "What do you do?" << std::endl;
+			getInputFromPlayerAsString();
+		}
+	}
+
+	else if (playerInput == "HP")
+	{
+		std::cout << "You have " << playerHP << "HP" << std::endl;
+		std::cout << "What do you do?" << std::endl;
+		getInputFromPlayerAsString();
+	}
+
+	else if (playerInput == "heal")
+	{
+		int healAmount = rand() % 3 + 1;
+		playerHP += healAmount;
+		std::cout << "You just healed yourself for " << healAmount << "HP" <<std::endl;
+		std::cout << "What do you do?" << std::endl;
+		getInputFromPlayerAsString();
+	}
+
 	else if (playerInput == "silence" && playerLocation == 1)
 	{
 		riddleSolved = true;
@@ -382,9 +445,19 @@ void convertInputToCommand(std::string playerInput)
 		std::cout << "What do you do?" << std::endl;
 		getInputFromPlayerAsString();
 	}
+	
 }
 
-
+void gameOver()
+{
+	std::cout << "Game Over! You Died." << std::endl;
+	std::cout << "Game will restart in 5 seconds." << std::endl;
+	std::chrono::seconds sleep_duration(5);
+	std::this_thread::sleep_for(sleep_duration);
+	playerLocation = 2;
+	playerHP = 15;
+	descRoom();
+}
 
 int main()
 {
