@@ -10,15 +10,22 @@ int goblinHP = 10;
 int dragonHP = 15;
 int trollHP = 5;
 int playerHP = 15;
-
+std::string playerInput;
 bool riddleSolved = false;
 bool trollKilled = false;
 bool goblinKilled = false;
 bool dragonKilled = false;
 bool treasureLooted = false;
-
-void convertInputToCommand(std::string playerInput);
+bool wantToExit = false;
+void convertInputToCommand();
 void gameOver();
+void move(int direction);
+void descRoom();
+void HP();
+void heal();
+void guard();
+void attack();
+void loot();
 
 bool checkIfMoveLegal(int direction)
 {
@@ -121,10 +128,64 @@ bool checkIfMoveLegal(int direction)
 
 void getInputFromPlayerAsString()
 {
-	std::string playerInput;
 	std::cin >> playerInput;
-	std::cout << std::endl;
-	convertInputToCommand(playerInput);
+	std::cout << "\n";
+}
+
+void move(int direction)
+{
+	switch (direction)
+	{
+	case 1:
+		if (checkIfMoveLegal(1))
+		{
+			playerLocation -= 3;
+			descRoom();
+			
+		}
+		else
+		{
+			std::cout << "Something is blocking the way.\n";
+			
+		}
+		break;
+	case 2:
+		if (checkIfMoveLegal(2))
+		{
+			playerLocation += 1;
+			descRoom();
+			
+		}
+		else
+		{
+			std::cout << "Something is blocking the way.\n";
+		}
+		break;
+	case 3:
+		if (checkIfMoveLegal(3))
+		{
+			playerLocation += 3;
+			descRoom();
+		}
+		else
+		{
+			std::cout << "Something is blocking the way.\n";
+		}
+		break;
+	case 4:
+		if (checkIfMoveLegal(4))
+		{
+			playerLocation -= 1;
+			descRoom();
+		}
+		else
+		{
+			std::cout << "Something is blocking the way.\n";
+		}
+		break;
+	default:
+		break;
+	}
 }
 
 void descRoom()
@@ -133,333 +194,306 @@ void descRoom()
 	{
 
 	case 1:
-		std::cout << "You are in a room with a riddle. The riddle is:" << std::endl;
-		std::cout << "When my name is spoken aloud, I go away. Who am I?" << std::endl;
-		getInputFromPlayerAsString();
+		std::cout << "You are in a room with a riddle. The riddle is:\n";
+		std::cout << "When my name is spoken aloud, I go away. Who am I?\n";
 		break;
 
 	case 2:
-		std::cout << "You're in a room with a small sign that says:" << std::endl;
-		std::cout << "West for a riddle, East for a fight." << std::endl;
-		std::cout << "There is a door to the East and a door to the West." << std::endl;
-		std::cout << "What do you do?" << std::endl;
-		getInputFromPlayerAsString();
+		std::cout << "You're in a room with a small sign that says:\n";
+		std::cout << "West for a riddle, East for a fight.\n";
+		std::cout << "There is a door to the East and a door to the West.\n";
 		break;
 
 	case 3:
-		std::cout << "You're in a room with a door to the east and a door to the south" << std::endl;
+		std::cout << "You're in a room with a door to the east and a door to the south\n";
 		if (!trollKilled)
 		{
-			std::cout << "There's an angry troll about to attack you." << std::endl;
+			std::cout << "There's an angry troll about to attack you.\n";
 		}
 		else
 		{
-			std::cout << "There's a troll corpse." << std::endl;
+			std::cout << "There's a troll corpse.\n";
 		}
-		std::cout << "What do you do?" << std::endl;
-		getInputFromPlayerAsString();
 		break;
 
 	case 4:
-		std::cout << "You're in a room with one door to the west, one to the south and one to the north." << std::endl;
+		std::cout << "You're in a room with one door to the west, one to the south and one to the north.\n";
 		if (!goblinKilled)
 		{
-			std::cout << "There's a mad goblin about to attack you." << std::endl;
+			std::cout << "There's a mad goblin about to attack you.\n";
 		}
 		else
 		{
-			std::cout << "There's a goblin corpse." << std::endl;
+			std::cout << "There's a goblin corpse.\n";
 		}
-		std::cout << "What do you do?" << std::endl;
-		getInputFromPlayerAsString();
 		break;
 
 	case 5:
-		std::cout << "You're in a room with a door to the east and a door to the west" << std::endl;
+		std::cout << "You're in a room with a door to the east and a door to the west\n";
 		if (!treasureLooted)
 		{
-			std::cout << "There's a treasure chest in the middle." << std::endl;
+			std::cout << "There's a treasure chest in the middle.\n";
 		}
 		else
 		{
-			std::cout << "There's an empty treasure chest in the middle." << std::endl;
+			std::cout << "There's an empty treasure chest in the middle.\n";
 		}
-
-		std::cout << "What do you do?" << std::endl;
-		getInputFromPlayerAsString();
 		break;
 	case 6:
-		std::cout << "You're in a room with a small sign that says:" << std::endl;
-		std::cout << "Treasure is to the West!. Fight is to the north." << std::endl;
-		std::cout << "There is a door to the West and a door to the North." << std::endl;
-		std::cout << "What do you do?" << std::endl;
-		getInputFromPlayerAsString();
+		std::cout << "You're in a room with a small sign that says:\n";
+		std::cout << "Treasure is to the West!. Fight is to the north.\n";
+		std::cout << "There is a door to the West and a door to the North.\n";
 		break;
 	case 7:
-		std::cout << "You're in a room with a small sign that says:" << std::endl;
-		std::cout << "East for the dragon, North for a fight." << std::endl;
-		std::cout << "There is a door to the North and a door to the East." << std::endl;
-		std::cout << "What do you do?" << std::endl;
-		getInputFromPlayerAsString();
+		std::cout << "You're in a room with a small sign that says:\n";
+		std::cout << "East for the dragon, North for a fight.\n";
+		std::cout << "There is a door to the North and a door to the East.\n";
 		break;
 	case 8:
-		std::cout << "You're in a room with one door to the East." << std::endl;
+		std::cout << "You're in a room with one door to the East.\n";
 		if (!dragonKilled)
 		{
-			std::cout << "There's a red dragon about to attack you." << std::endl;
+			std::cout << "There's a red dragon about to attack you.\n";
 		}
 		else
 		{
-			std::cout << "You Won!" << std::endl;
+			std::cout << "You Won!\n";
 		}
-		std::cout << "What do you do?" << std::endl;
-		getInputFromPlayerAsString();
 		break;
 	}
 }
 
-void convertInputToCommand(std::string playerInput)
+void convertInputToCommand()
 {
-	if (playerInput == "gon")
+	if (playerInput == "gon") 
 	{
-		if (checkIfMoveLegal(1))
-		{
-			playerLocation -= 3;
-			descRoom();
-			std::cout << "What do you do?" << std::endl;
-			getInputFromPlayerAsString();
-		}
-		else
-		{
-			std::cout << "Something is blocking the way." << std::endl;
-			std::cout << "What do you do?" << std::endl;
-			getInputFromPlayerAsString();
-		}
+		move(1);
 	}
+
 	else if (playerInput == "goe")
 	{
-		if (checkIfMoveLegal(2))
-		{
-			playerLocation += 1;
-			descRoom();
-			std::cout << "What do you do?" << std::endl;
-			getInputFromPlayerAsString();
-		}
-		else
-		{
-			std::cout << "Something is blocking the way." << std::endl;
-			std::cout << "What do you do?" << std::endl;
-			getInputFromPlayerAsString();
-		}
+		move(2);
 	}
+
 	else if (playerInput == "gos")
 	{
-		if (checkIfMoveLegal(3))
-		{
-			playerLocation += 3;
-			descRoom();
-			std::cout << "What do you do?" << std::endl;
-			getInputFromPlayerAsString();
-		}
-		else
-		{
-			std::cout << "Something is blocking the way." << std::endl;
-			std::cout << "What do you do?" << std::endl;
-			getInputFromPlayerAsString();
-		}
+		move(3);
 	}
+
 	else if (playerInput == "gow")
 	{
-		if (checkIfMoveLegal(4))
-		{
-			playerLocation -= 1;
-			descRoom();
-			std::cout << "What do you do?" << std::endl;
-			getInputFromPlayerAsString();
-		}
-		else
-		{
-			std::cout << "Something is blocking the way." << std::endl;
-			std::cout << "What do you do?" << std::endl;
-			getInputFromPlayerAsString();
-		}
+		move(4);
 	}
 	
 	else if (playerInput == "attack")
 	{
-		switch (playerLocation)
-		{
-			case 3:
-				std::cout << "You hit the troll with your sword. It takes 2 points of damage." << std::endl;
-				trollHP -= 2;
-				if (trollHP <= 0)
-				{
-					trollKilled = true;
-					std::cout << "The troll is now dead." << std::endl;
-					if (playerHP <= 0)
-					{
-						gameOver();
-					}
-				}
-				else
-				{
-					std::cout << "It hits you back for 1 point of damage." << std::endl;
-					playerHP -= 1;
-					if (playerHP <= 0)
-					{
-						gameOver();
-					}
-				}
-				std::cout << "What do you do?" << std::endl;
-				getInputFromPlayerAsString();
-				break;
-				
-			case 4:
-				std::cout << "You hit the goblin with your sword. It takes 2 points of damage." << std::endl;
-				goblinHP -= 2;
-				if (goblinHP <= 0)
-				{
-					goblinKilled = true;
-					std::cout << "The goblin is now dead." << std::endl;
-					if (playerHP <= 0)
-					{
-						gameOver();
-					}
-				}
-				else
-				{
-					std::cout << "It hits you back for 1 point of damage." << std::endl;
-					playerHP -= 1;
-					if (playerHP <= 0)
-					{
-						gameOver();
-					}
-				}
-				std::cout << "What do you do?" << std::endl;
-				getInputFromPlayerAsString();
-				break;
-
-			case 8:
-				std::cout << "You hit the dragon with your sword. It takes 2 points of damage." << std::endl;
-				dragonHP -= 2;
-				if (dragonHP <= 0)
-				{
-					dragonKilled = true;
-					std::cout << "The dragon is now dead." << std::endl;
-					if (playerHP <= 0)
-					{
-						gameOver();
-					}
-				}
-				else
-				{
-					std::cout << "It hits you back for 2 points of damage." << std::endl;
-					playerHP -= 2;
-					if (playerHP <= 0)
-					{
-						gameOver();
-					}
-				}
-				std::cout << "What do you do?" << std::endl;
-				getInputFromPlayerAsString();
-				break;
-
-			default:
-				std::cout << "There's nothing to fight here!" << std::endl;
-				std::cout << "What do you do?" << std::endl;
-				getInputFromPlayerAsString();
-				break;
-		}
+		attack();
 	}
 
 	else if (playerInput == "loot")
 	{
-		if (playerLocation == 5 && treasureLooted == false)
-		{
-			score += 100;
-			std::cout << "Looting was Successful! You got 100 point to your score!" << std::endl;
-			std::cout << "What do you do?" << std::endl;
-			getInputFromPlayerAsString();
-		}
+		loot();
 	}
 
 	else if (playerInput == "desc")
 	{
 		descRoom();
-		if (playerLocation == 1 && riddleSolved)
-		{
-			std::cout << "What do you do?" << std::endl;
-			getInputFromPlayerAsString();
-		}
-
 	}
 
 	else if (playerInput == "guard")
 	{
-		if (playerLocation == 3 || playerLocation == 4 || playerLocation == 8)
-		{
-			std::cout << "You get hit but you manage to block the hit." << std::endl;
-			std::cout << "What do you do?" << std::endl;
-			getInputFromPlayerAsString();
-		}
-		else 
-		{
-			std::cout << "There's nothing to guard from!" << std::endl;
-			std::cout << "What do you do?" << std::endl;
-			getInputFromPlayerAsString();
-		}
+		guard();
 	}
 
 	else if (playerInput == "HP")
 	{
-		std::cout << "You have " << playerHP << "HP" << std::endl;
-		std::cout << "What do you do?" << std::endl;
-		getInputFromPlayerAsString();
+		HP();
 	}
 
 	else if (playerInput == "heal")
 	{
-		int healAmount = rand() % 3 + 1;
-		playerHP += healAmount;
-		std::cout << "You just healed yourself for " << healAmount << "HP" <<std::endl;
-		std::cout << "What do you do?" << std::endl;
-		getInputFromPlayerAsString();
+		heal();
 	}
 
 	else if (playerInput == "silence" && playerLocation == 1)
 	{
 		riddleSolved = true;
-		std::cout << "That's right! The door to the south opens." << std::endl;
-		std::cout << "What do you do?" << std::endl;
-		getInputFromPlayerAsString();
+		std::cout << "That's right! The door to the south opens.\n";
 	}
 
 	else if (playerInput == "exit")
 	{
-		exit(0);
+		wantToExit = true;
 	}
 	else 
 	{
-		std::cout << "Invalid Command" << std::endl;
-		std::cout << "What do you do?" << std::endl;
-		getInputFromPlayerAsString();
+		std::cout << "Invalid Command\n";
 	}
 	
 }
 
+void guard()
+{
+	if (playerLocation == 3 || playerLocation == 4 || playerLocation == 8)
+	{
+		std::cout << "You get hit but you manage to block the hit.\n";
+		playerHP += 2;
+	}
+	else
+	{
+		std::cout << "There's nothing to guard from!\n";
+	}
+}
+
+void loot()
+{
+	if (playerLocation == 5 && treasureLooted == false)
+	{
+		score += 100;
+		std::cout << "Looting was Successful! You got 100 point to your score!\n";
+		treasureLooted = true;
+	}
+}
+
+void attack()
+{
+	switch (playerLocation)
+	{
+	case 3:
+		if (!trollKilled)
+		{
+			std::cout << "You hit the troll with your sword. It takes 2 points of damage.\n";
+			trollHP -= 2;
+			if (trollHP <= 0)
+			{
+				trollKilled = true;
+				std::cout << "The troll is now dead.\n";
+			}
+		}
+		else
+		{
+			std::cout << "There's nothing to fight here!\n";
+		}
+		break;
+
+	case 4:
+		if (!goblinKilled)
+		{
+			std::cout << "You hit the goblin with your sword. It takes 2 points of damage.\n";
+			goblinHP -= 2;
+			if (goblinHP <= 0)
+			{
+				goblinKilled = true;
+				std::cout << "The goblin is now dead.\n";
+			}
+		}
+		else
+		{
+			std::cout << "There's nothing to fight here!\n";
+		}
+		break;
+
+	case 8:
+		if (!dragonKilled)
+		{
+			std::cout << "You hit the dragon with your sword. It takes 2 points of damage.\n";
+			dragonHP -= 2;
+			if (dragonHP <= 0)
+			{
+				dragonKilled = true;
+				std::cout << "The dragon is now dead.\n";
+			}
+		}
+		else 
+		{
+			std::cout << "There's nothing to fight here!\n";
+		}
+		break;
+
+	default:
+		std::cout << "There's nothing to fight here!\n";
+		break;
+	}
+}
+
 void gameOver()
 {
-	std::cout << "Game Over! You Died." << std::endl;
-	std::cout << "Game will restart in 5 seconds." << std::endl;
+	std::cout << "That hit was too much for you.";
+	std::cout << "You Died.\n";
+	std::cout << "Game will restart in 5 seconds.\n";
+	playerHP = 15;
+	playerLocation = 2;
+	playerInput = "";
 	std::chrono::seconds sleep_duration(5);
 	std::this_thread::sleep_for(sleep_duration);
-	playerLocation = 2;
-	playerHP = 15;
 	descRoom();
+}
+
+void heal()
+{
+	int healAmount = rand() % 3 + 1;
+	playerHP += healAmount;
+	std::cout << "You just healed yourself for " << healAmount << "HP\n";
+}
+
+void HP()
+{
+	std::cout << "You have " << playerHP << "HP\n";
 }
 
 int main()
 {
 	descRoom();
+	while (!wantToExit)
+	{
+		if (playerHP > 0)
+		{
+			std::cout << "What do you do?\n";
+			getInputFromPlayerAsString();
+			convertInputToCommand();
+			switch (playerLocation)
+			{
+				case 3:
+
+					if (!trollKilled)
+					{
+						std::cout << "It hits you for 2 points of damage.\n";
+						playerHP -= 2;
+					
+					}
+
+					break;
+			
+				case 4:
+
+					if (!goblinKilled)
+					{
+						std::cout << "It hits you for 2 points of damage.\n";
+						playerHP -= 2;
+					}
+
+					break;
+				case 8:
+
+				if (!dragonKilled)
+				{
+					std::cout << "It hits you for 2 points of damage.\n";
+					playerHP -= 2;
+				}
+
+				break;
+
+
+				default:
+
+				break;
+			}
+		}
+		else
+		{
+			gameOver();
+		}
+	}
 	return 0;
 }
+	
